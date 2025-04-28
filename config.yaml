@@ -1,0 +1,24 @@
+# config.yaml
+
+library_name: dataforge
+version: 0.1.0
+author: Moustafa Mohamed
+description: |
+  DataForge is a lightweight Python library designed to display detailed
+  information about a DataFrame, including structure, null values, data types,
+  and basic statistics, in a clean tabular format.
+features:
+  - Show number of rows and columns
+  - Display column names and data types
+  - Show null and non-null counts per column
+  - Calculate mean for numeric columns
+  - Output in clean, tabulated format
+dependencies:
+  - pandas
+  - tabulate
+status: Stable (Initial Version)
+future_plans:
+  - Add data cleaning functions
+  - Integrate machine learning preprocessing tools
+  - Add deep learning preprocessing support
+repository: https://github.com/MoustafaMohamed01/dataforge.git
