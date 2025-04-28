@@ -47,4 +47,3 @@ pip install pandas tabulate
 ## Author
 
 Developed by [Moustafa Mohamed](https://github.com/MoustafaMohamed01) | [Linkedin](https://www.linkedin.com/in/moustafamohamed01/) | [Kaggle](https://www.kaggle.com/moustafamohamed01)
-```
