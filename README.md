@@ -1,27 +1,30 @@
 # DataForge  
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-**DataForge** is a lightweight Python library designed to simplify exploratory data analysis and data cleaning for pandas DataFrames.  
-It helps you quickly generate detailed dataset summaries and clean messy column names, all with clean and customizable outputs.
+**DataForge** is a lightweight and modular Python library for **exploratory data analysis (EDA)** and **data cleaning** using `pandas`.  
+It helps you quickly generate clean summaries, standardize column names, and handle missing values — all with professional tabulated outputs and optional YAML configuration.
 
 ---
 
 ## Features
 
-- **Dataset Summary**  
-  - Display number of rows and columns
-  - List data types, null counts, and non-null counts
-  - Calculate mean values for numeric columns
-- **Data Cleaning**  
-  - Clean column names for better consistency and readability
-- **Configuration Support**  
-  - Use `config.yaml` to customize behavior without modifying the code
-- **Tabulated Output**  
-  - Generate clear and professional summaries with the `tabulate` library
+- **Dataset Summary**
+  - Report total rows, columns, data types, missing values, and basic statistics
+- **Column Name Cleaning**
+  - Standardize column names for readability and consistency
+- **Missing Value Handling** (`clean_missing_data`)
+  - Convert data types (numeric and datetime)
+  - Drop columns with excessive missing values
+  - Fill missing values using intelligent strategies (mean, median, mode)
+  - Optionally remove duplicate rows
+- **YAML Configuration Support**
+  - Customize behavior using `config.yaml` without touching your code
+- **Formatted Output**
+  - Display insights with beautiful, readable tables powered by `tabulate`
 
 ---
 
-##  Installation
+## Installation
 
 Clone the repository:
 
@@ -30,13 +33,13 @@ git clone https://github.com/MoustafaMohamed01/dataforge.git
 cd dataforge
 ```
 
-Install the required dependencies:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Or install manually:
+Or install them manually:
 
 ```bash
 pip install pandas tabulate
@@ -44,43 +47,44 @@ pip install pandas tabulate
 
 ---
 
-##  Project Structure
+## Project Structure
 
 ```
 dataforge/
 │
 ├── dataforge/
-│   ├── __init__.py          # Main package initializer
-│   ├── column_cleaner.py    # Functions for cleaning column names
-│   ├── detailed_info.py     # Functions for generating dataset summaries
+│   ├── __init__.py            # Main package initializer
+│   ├── column_cleaning.py      # Functions to clean column names
+│   ├── detailed_info.py       # EDA functions for summarizing datasets
+│   ├── data_cleaning.py     # Functions to handle missing values intelligently
 │
-├── config.yaml              # Configuration file
-├── LICENSE                  # Project license (MIT)
-├── requirements.txt         # Project dependencies
-├── setup.py                 # Installation and packaging
-├── README.md                
+├── config.yaml                # Optional configuration file
+├── LICENSE                    # MIT license
+├── requirements.txt           # Project dependencies
+├── setup.py                   # Setup script for packaging
+├── README.md                  # Project documentation
 ```
 
 ---
 
-##  Requirements
+## Requirements
 
 - `pandas`
 - `tabulate`
 
-All dependencies are listed in [`requirements.txt`](requirements.txt).
+All required packages are listed in [`requirements.txt`](requirements.txt).
 
 ---
 
-##  License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-##  Author
+## Author
 
-Developed by [Moustafa Mohamed](https://github.com/MoustafaMohamed01)  
+Developed by [Moustafa Mohamed](https://github.com/MoustafaMohamed01)
 
 - [LinkedIn](https://www.linkedin.com/in/moustafamohamed01/)
 - [Kaggle](https://www.kaggle.com/moustafamohamed01)
