@@ -4,10 +4,20 @@ setup(
     name="dataforge",
     version="0.1.0",
     author="Moustafa Mohamed",
-    description="A data analysis helper library using pandas and tabulate",
-    package_data=[
-        "pandas",
-        "tabulate"
+    author_email="moustafa.mh.mohamed@gmail.com",
+    description="A lightweight library for exploring and cleaning datasets for ML workflows.",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    url="https://github.com/MoustafaMohamed01/dataforge",
+    packages=find_packages(),
+    install_requires=[
+        "pandas>=1.0.0",
+        "tabulate>=0.8.0"
     ],
-    python_requires=">=3.7"
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires='>=3.7',
 )
