@@ -1,10 +1,10 @@
 # config.yaml
 
-library_name: dataforge
+library_name: datacmp
 version: 0.1.0
 author: Moustafa Mohamed
 description: |
-  DataForge is a lightweight Python library designed to display detailed
+  Datacmp is a lightweight Python library designed to display detailed
   information about a DataFrame, including structure, null values, data types,
   and basic statistics, in a clean tabular format.
 features:
@@ -21,4 +21,4 @@ future_plans:
   - Add data cleaning functions
   - Integrate machine learning preprocessing tools
   - Add deep learning preprocessing support
-repository: https://github.com/MoustafaMohamed01/dataforge.git
+repository: https://github.com/MoustafaMohamed01/datacmp.git
