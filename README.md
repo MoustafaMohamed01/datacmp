@@ -1,7 +1,7 @@
-# DataForge  
+# Datacmp  
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-**DataForge** is a lightweight and modular Python library for **exploratory data analysis (EDA)** and **data cleaning** using `pandas`.  
+**Datacmp** is a lightweight and modular Python library for **exploratory data analysis (EDA)** and **data cleaning** using `pandas`.  
 It helps you quickly generate clean summaries, standardize column names, and handle missing values — all with professional tabulated outputs and optional YAML configuration.
 
 ---
@@ -29,7 +29,7 @@ It helps you quickly generate clean summaries, standardize column names, and han
 Clone the repository:
 
 ```bash
-git clone https://github.com/MoustafaMohamed01/dataforge.git
+git clone https://github.com/MoustafaMohamed01/datacmp.git
 cd dataforge
 ```
 
@@ -50,9 +50,9 @@ pip install pandas tabulate
 ## Project Structure
 
 ```
-dataforge/
+datacmp/
 │
-├── dataforge/
+├── datacmp/
 │   ├── __init__.py            # Main package initializer
 │   ├── column_cleaning.py      # Functions to clean column names
 │   ├── detailed_info.py       # EDA functions for summarizing datasets
