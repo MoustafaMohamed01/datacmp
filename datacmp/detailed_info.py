@@ -21,7 +21,7 @@ def get_detailed(df):
     
     info = [
         ["Number of Rows", num_rows],
-        ["Number of Rows", num_cols]
+        ["Number of Columns", num_cols]
     ]
 
     return tabulate(info, headers=["Info", "Values"], tablefmt="rounded_outline") + "\n\n" + tabulate(data, headers="firstrow", tablefmt="rounded_outline")
