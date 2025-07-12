@@ -1,7 +1,7 @@
 # config.yaml
 
 library_name: datacmp
-version: 0.1.0
+version: 2.0.0
 author: Moustafa Mohamed
 description: |
   Datacmp is a lightweight Python library designed to display detailed
@@ -22,3 +22,18 @@ future_plans:
   - Integrate machine learning preprocessing tools
   - Add deep learning preprocessing support
 repository: https://github.com/MoustafaMohamed01/datacmp.git
+
+
+cleaning:
+  fill_strategy:
+    categorical: mode
+    numeric: median
+  outlier_handling:
+    action: cap
+    enabled: true
+    iqr_multiplier: 1.5
+    method: iqr
+  threshold_drop: 0.45
+drop_duplicates: true
+profiling:
+  include_more_stats: true
