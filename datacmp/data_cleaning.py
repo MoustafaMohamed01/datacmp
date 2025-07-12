@@ -23,7 +23,7 @@ def _handle_outliers_iqr(series, config):
         removed_count = initial_count - cleaned_series.shape[0]
         return cleaned_series, removed_count
     
-    return series, 0 # Return original series and 0 count if no action
+    return series, 0
 
 def clean_missing_data(df, config=None):
     """
@@ -48,11 +48,9 @@ def clean_missing_data(df, config=None):
         dropped_rows = initial_rows - len(df)
         report['actions'].append(f"Dropped {dropped_rows} duplicate rows.")
     
-    # Type conversion logic could go here, for now it's in the loop
     
     missing_info = df.isnull().mean()
     
-    # Process each column based on config
     for col in df.columns:
         missing_ratio = missing_info[col]
         
@@ -70,7 +68,7 @@ def clean_missing_data(df, config=None):
                     fill_value = df[col].median()
                 elif strategy == 'mode':
                     fill_value = df[col].mode()[0] if not df[col].mode().empty else 0
-                else: # Default to mean
+                else:
                     fill_value = df[col].mean()
                 df[col] = df[col].fillna(fill_value)
                 report['actions'].append(f"Filled numeric column '{col}' with {strategy}.")
@@ -82,11 +80,10 @@ def clean_missing_data(df, config=None):
                         df[col] = df[col].fillna(mode_value[0])
                     else:
                         df[col] = df[col].fillna('Unknown')
-                else: # Default to 'Unknown'
+                else:
                     df[col] = df[col].fillna('Unknown')
                 report['actions'].append(f"Filled categorical column '{col}' with '{strategy}'.")
 
-    # Handle outliers based on config
     outlier_config = cleaning_config.get('outlier_handling', {})
     if outlier_config.get('enabled', False) and outlier_config.get('method') == 'iqr':
         for col in df.columns:
