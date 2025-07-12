@@ -1,97 +1,99 @@
 import pandas as pd
 
-def clean_missing_data(df, to_numeric=[None], to_datetime=[None], threshold_drop=0.4, drop_duplicates=False):
+def _handle_outliers_iqr(series, config):
     """
-    Cleans missing values in a DataFrame by:
-    - Dropping columns with too many missing values.
-    - Filling numeric columns with mean or median based on skewness.
-    - Filling categorical columns with mode.
-    - [Optional] Dropping duplicate rows.
+    Internal function to detect and handle outliers using the IQR method.
+    """
+    q1 = series.quantile(0.25)
+    q3 = series.quantile(0.75)
+    iqr = q3 - q1
+    multiplier = config.get('iqr_multiplier', 1.5)
+    lower_bound = q1 - multiplier * iqr
+    upper_bound = q3 + multiplier * iqr
+    
+    action = config.get('action', 'cap')
+    
+    if action == 'cap':
+        series = series.clip(lower=lower_bound, upper=upper_bound)
+        return series, series[~series.between(lower_bound, upper_bound)].count()
+    
+    elif action == 'remove':
+        initial_count = series.shape[0]
+        cleaned_series = series[series.between(lower_bound, upper_bound)]
+        removed_count = initial_count - cleaned_series.shape[0]
+        return cleaned_series, removed_count
+    
+    return series, 0 # Return original series and 0 count if no action
+
+def clean_missing_data(df, config=None):
+    """
+    Cleans missing values and handles outliers based on a config dictionary.
     
     Parameters:
     - df: pandas DataFrame
-    - threshold_drop: float, columns with missing % > this will be dropped
-
+    - config: dict, configuration loaded from YAML.
+    
     Returns:
-    - Cleaned DataFrame
+    - cleaned_df: pandas DataFrame
+    - report: dict, summary of actions taken
     """
     df = df.copy()
-
-    if drop_duplicates:
+    report = {'actions': []}
+    
+    cleaning_config = config.get('cleaning', {}) if config else {}
+    
+    if config and config.get('drop_duplicates', False):
+        initial_rows = len(df)
         df.drop_duplicates(inplace=True)
-        print("\nDropped duplicate rows.")
-
-    numeric_conversions = []
-    datetime_conversions = []
-    numeric_fillings = []
-    categorical_fillings = []
-    dropped_columns = []
-
-    for col in to_numeric:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-            numeric_conversions.append(col)
-
-    for col in to_datetime:
-        if col in df.columns:
-            df[col] = pd.to_datetime(df[col], errors='coerce')
-            datetime_conversions.append(col)
-
+        dropped_rows = initial_rows - len(df)
+        report['actions'].append(f"Dropped {dropped_rows} duplicate rows.")
+    
+    # Type conversion logic could go here, for now it's in the loop
+    
     missing_info = df.isnull().mean()
-
+    
+    # Process each column based on config
     for col in df.columns:
         missing_ratio = missing_info[col]
         
-        if missing_ratio == 0:
+        if missing_ratio > cleaning_config.get('threshold_drop', 0.4):
+            df.drop(columns=[col], inplace=True)
+            report['actions'].append(f"Dropped column '{col}' due to {missing_ratio:.2%} missing values.")
             continue
         
-        if missing_ratio > threshold_drop:
-            dropped_columns.append((col, f"{missing_ratio:.2%}"))
-            df.drop(columns=[col], inplace=True)
-            continue
-
-        if df[col].dtype in ['float64', 'int64']:
-            if abs(df[col].skew()) < 1:
-                fill_value = df[col].mean()
-                method = 'mean'
+        if missing_ratio > 0:
+            if pd.api.types.is_numeric_dtype(df[col]):
+                strategy = cleaning_config.get('fill_strategy', {}).get('numeric', 'mean')
+                if strategy == 'mean':
+                    fill_value = df[col].mean()
+                elif strategy == 'median':
+                    fill_value = df[col].median()
+                elif strategy == 'mode':
+                    fill_value = df[col].mode()[0] if not df[col].mode().empty else 0
+                else: # Default to mean
+                    fill_value = df[col].mean()
+                df[col] = df[col].fillna(fill_value)
+                report['actions'].append(f"Filled numeric column '{col}' with {strategy}.")
             else:
-                fill_value = df[col].median()
-                method = 'median'
-            df[col] = df[col].fillna(fill_value)
-            numeric_fillings.append((col, method))
-        else:
-            mode_value = df[col].mode()
-            if not mode_value.empty:
-                df[col] = df[col].fillna(mode_value[0])
-                categorical_fillings.append((col, 'mode'))
-            else:
-                df[col] = df[col].fillna('Unknown')
-                categorical_fillings.append((col, 'Unknown'))
+                strategy = cleaning_config.get('fill_strategy', {}).get('categorical', 'mode')
+                if strategy == 'mode':
+                    mode_value = df[col].mode()
+                    if not mode_value.empty:
+                        df[col] = df[col].fillna(mode_value[0])
+                    else:
+                        df[col] = df[col].fillna('Unknown')
+                else: # Default to 'Unknown'
+                    df[col] = df[col].fillna('Unknown')
+                report['actions'].append(f"Filled categorical column '{col}' with '{strategy}'.")
 
+    # Handle outliers based on config
+    outlier_config = cleaning_config.get('outlier_handling', {})
+    if outlier_config.get('enabled', False) and outlier_config.get('method') == 'iqr':
+        for col in df.columns:
+            if pd.api.types.is_numeric_dtype(df[col]):
+                initial_series = df[col].copy()
+                df[col], handled_count = _handle_outliers_iqr(initial_series, outlier_config)
+                if handled_count > 0:
+                    report['actions'].append(f"Handled {handled_count} outliers in '{col}' by '{outlier_config['action']}'.")
 
-    if numeric_conversions:
-        print("Converting columns to numeric:")
-        for col in numeric_conversions:
-            print(f"    • {col}")
-    
-    if datetime_conversions:
-        print("\nConverting columns to datetime:")
-        for col in datetime_conversions:
-            print(f"    • {col}")
-
-    if numeric_fillings:
-        print("\nFilling numeric columns:")
-        for col, method in numeric_fillings:
-            print(f"    • {col:<16} → {method}")
-
-    if categorical_fillings:
-        print("\nFilling categorical columns:")
-        for col, method in categorical_fillings:
-            print(f"    • {col:<16} → {method}")
-
-    if dropped_columns:
-        print("\nDropping columns due to high missing values:")
-        for col, ratio in dropped_columns:
-            print(f"    • {col:<16} → {ratio} missing")
-
-    return df
+    return df, report
