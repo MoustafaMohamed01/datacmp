@@ -172,6 +172,7 @@ Released under the MIT License. See [LICENSE](LICENSE) for details.
 ## Author
 
 Developed by [Moustafa Mohamed](https://github.com/MoustafaMohamed01)
-🔗 [LinkedIn](https://www.linkedin.com/in/moustafamohamed01/) • [Kaggle](https://www.kaggle.com/moustafamohamed01)
+
+[LinkedIn](https://www.linkedin.com/in/moustafamohamed01/) • [Kaggle](https://www.kaggle.com/moustafamohamed01)
 
 ---
