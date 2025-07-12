@@ -1,58 +1,130 @@
+# datacmp – Exploratory Data Analysis & Data Cleaning Toolkit
 
-# Datacmp  
-[![PyPI version](https://img.shields.io/pypi/v/datacmp.svg)](https://pypi.org/project/datacmp/) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![PyPI version](https://img.shields.io/pypi/v/datacmp.svg)](https://pypi.org/project/datacmp/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Datacmp** is a lightweight and modular Python library for **exploratory data analysis (EDA)** and **data cleaning** using `pandas`.  
-It helps you quickly generate clean summaries, standardize column names, and handle missing values — all with professional tabulated outputs and optional YAML configuration.
+datacmp is a lightweight, modular Python library designed to simplify and accelerate exploratory data analysis (EDA) and data cleaning tasks in data science workflows. It provides structured insights, intelligent preprocessing, and configuration flexibility through a YAML-based pipeline.
 
-🔗 **Available on PyPI**: [https://pypi.org/project/datacmp/](https://pypi.org/project/datacmp/)
+Available on PyPI: [https://pypi.org/project/datacmp/](https://pypi.org/project/datacmp/)
 
 ---
 
-## Features
+## Key Features
 
-- **Dataset Summary**
-  - Report total rows, columns, data types, missing values, and basic statistics
-- **Column Name Cleaning**
-  - Standardize column names for readability and consistency
-- **Missing Value Handling** (`clean_missing_data`)
-  - Convert data types (numeric and datetime)
-  - Drop columns with excessive missing values
-  - Fill missing values using intelligent strategies (mean, median, mode)
-  - Optionally remove duplicate rows
-- **YAML Configuration Support**
-  - Customize behavior using `config.yaml` without touching your code
-- **Formatted Output**
-  - Display insights with beautiful, readable tables powered by `tabulate`
+Data Overview & Profiling
+
+* Generates concise, tabulated summaries of your dataset
+* Reports missing values, data types, and unique counts
+* Optional extended statistics: mean, median, std, skewness, kurtosis
+* Column type breakdown: numeric, categorical, datetime
+
+Column Name Standardization
+
+* Automatically cleans and renames columns (lowercase, no spaces)
+* Logs name transformations for traceability
+
+Missing Value & Outlier Handling
+
+* Drops columns exceeding a missing value threshold
+* Fills missing values using configurable strategies (mean, median, mode)
+* Detects and handles outliers using IQR (remove or cap)
+* Optionally removes duplicate rows
+
+YAML-Based Configuration
+
+* Easy customization of fill strategies, thresholds, and outlier handling
+* Fully decoupled from code logic for reproducibility
+
+Export Capabilities (v2.0+)
+
+* Save cleaned datasets as CSV
+* Generate human-readable reports in TXT format
+
+Command-Line Interface (v2.0+)
+
+* Run the full pipeline directly from terminal using a CLI wrapper
 
 ---
 
 ## Installation
 
-Install directly from PyPI:
+Install from PyPI:
 
 ```bash
 pip install datacmp
 ```
 
-Or clone the repository:
+Or install from source:
 
 ```bash
 git clone https://github.com/MoustafaMohamed01/datacmp.git
-cd dataforge
-```
-
-Install dependencies:
-
-```bash
+cd datacmp
 pip install -r requirements.txt
 ```
 
-Or install them manually:
+Requirements:
+
+* pandas
+* tabulate
+* PyYAML
+
+---
+
+## Configuration (config.yaml)
+
+Example configuration file:
+
+```yaml
+cleaning:
+  fill_strategy:
+    categorical: mode
+    numeric: median
+  outlier_handling:
+    enabled: true
+    method: iqr
+    action: cap
+    iqr_multiplier: 1.5
+  threshold_drop: 0.45
+drop_duplicates: true
+profiling:
+  include_more_stats: true
+```
+
+---
+
+## Usage (Python)
+
+Basic usage with config:
+
+```python
+import pandas as pd
+from datacmp.run_pipeline import run_pipeline
+
+df = pd.read_csv("data.csv")
+cleaned_df = run_pipeline(
+    df,
+    config_path="config.yaml",
+    export_csv_path="cleaned.csv",
+    export_report_path="summary.txt"
+)
+```
+
+---
+
+## Usage (CLI)
+
+Run from the command line:
 
 ```bash
-pip install pandas tabulate
+python cli.py --file data.csv --config config.yaml --export_csv cleaned.csv --export_report summary.txt
 ```
+
+Available arguments:
+
+* --file: input CSV file (required)
+* --config: YAML config file (default = config.yaml)
+* --export_csv: optional output path for cleaned CSV
+* --export_report: optional output path for summary TXT
 
 ---
 
@@ -60,40 +132,46 @@ pip install pandas tabulate
 
 ```
 datacmp/
-│
 ├── datacmp/
-│   ├── __init__.py            # Main package initializer
-│   ├── column_cleaning.py     # Functions to clean column names
-│   ├── detailed_info.py       # EDA functions for summarizing datasets
-│   ├── data_cleaning.py       # Functions to handle missing values intelligently
-│
-├── config.yaml                # Optional configuration file
-├── LICENSE                    # MIT license
-├── requirements.txt           # Project dependencies
-├── setup.py                   # Setup script for packaging
-├── README.md                  # Project documentation
+│   ├── __init__.py
+│   ├── column_cleaning.py       # Column renaming logic
+│   ├── data_cleaning.py         # Missing value & outlier processing
+│   ├── detailed_info.py         # Dataset summaries & profiling
+│   ├── run_pipeline.py          # Main pipeline logic
+├── cli.py                       # CLI entry point
+├── config.yaml                  # Example configuration
+├── setup.py                     # Packaging & dependencies
+├── README.md
+├── LICENSE
 ```
 
 ---
 
-## Requirements
+## Release History
 
-- `pandas`
-- `tabulate`
+🔹 v1.0.0 – Initial release
 
-All required packages are listed in [`requirements.txt`](requirements.txt).
+* Data profiling, missing value handling, column name cleaning, YAML config support
+
+🔹 v2.0.0 – Major update
+
+* Added CLI support
+* Added CSV & TXT export options
+* Enhanced profiling (column type summary)
+
+View changelog & releases → [https://github.com/MoustafaMohamed01/datacmp/releases](https://github.com/MoustafaMohamed01/datacmp/releases)
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+Released under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
 ## Author
 
 Developed by [Moustafa Mohamed](https://github.com/MoustafaMohamed01)
+🔗 [LinkedIn](https://www.linkedin.com/in/moustafamohamed01/) • [Kaggle](https://www.kaggle.com/moustafamohamed01)
 
-- [LinkedIn](https://www.linkedin.com/in/moustafamohamed01/)
-- [Kaggle](https://www.kaggle.com/moustafamohamed01)
+---
