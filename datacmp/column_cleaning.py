@@ -1,8 +1,6 @@
-# datacmp/column_cleaning.py
 import logging
 import pandas as pd
 
-# Set up logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.StreamHandler()
