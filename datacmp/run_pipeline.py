@@ -29,7 +29,6 @@ def run_pipeline(df, config_path='config.yaml', export_csv_path=None, export_rep
     initial_report = get_detailed(df, config)
     print(initial_report)
     
-    # ------------------ Cleaning Phase ------------------
     print("\n[STEP 2] Cleaning Column Names...")
     df = clean_column_names(df)
     print("Column names cleaned.")
@@ -39,19 +38,16 @@ def run_pipeline(df, config_path='config.yaml', export_csv_path=None, export_rep
     for action in cleaning_report.get('actions', []):
         print(f"   • {action}")
     
-    # ------------------ Final Report Phase ------------------
     print("\n[STEP 4] Generating Final Data Report...")
     final_report = get_detailed(df_cleaned, config)
     print(final_report)
     
     print("\n--- Datacmp Pipeline Finished ---")
     
-    # Export CSV if path provided
     if export_csv_path:
         df_cleaned.to_csv(export_csv_path, index=False)
         print(f"Cleaned data saved to: {export_csv_path}")
     
-    # Export full report if path provided
     if export_report_path:
         with open(export_report_path, 'w') as report_file:
             report_file.write("--- Initial Data Report ---\n\n")
@@ -71,4 +67,4 @@ def run_pipeline(df, config_path='config.yaml', export_csv_path=None, export_rep
 
 
 if __name__ == "__main__":
-    pass  # For real usage, user will import and call run_pipeline with their df and paths
+    pass
