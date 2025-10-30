@@ -1,6 +1,19 @@
-pandas>=1.5.0
-numpy>=1.23.0
-pyyaml>=6.0
-matplotlib>=3.6.0
-seaborn>=0.12.0
-tabulate>=0.9.0
+# Include all core requirements
+-r requirements.txt
+
+# Development Dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+isort>=5.12.0
+
+# Documentation
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.2.0
+
+# Build tools
+build>=0.10.0
+twine>=4.0.0
+wheel>=0.40.0
