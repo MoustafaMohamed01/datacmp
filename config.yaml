@@ -1,39 +1,116 @@
-# config.yaml
-
 library_name: datacmp
-version: 2.0.0
+version: 3.0.0
 author: Moustafa Mohamed
 description: |
-  Datacmp is a lightweight Python library designed to display detailed
-  information about a DataFrame, including structure, null values, data types,
-  and basic statistics, in a clean tabular format.
-features:
-  - Show number of rows and columns
-  - Display column names and data types
-  - Show null and non-null counts per column
-  - Calculate mean for numeric columns
-  - Output in clean, tabulated format
-dependencies:
-  - pandas
-  - tabulate
-status: Stable (Initial Version)
-future_plans:
-  - Add data cleaning functions
-  - Integrate machine learning preprocessing tools
-  - Add deep learning preprocessing support
-repository: https://github.com/MoustafaMohamed01/datacmp.git
+  Datacmp is a powerful Python library designed to simplify and accelerate
+  exploratory data analysis (EDA) and data cleaning tasks in data science
+  workflows. It provides structured insights, intelligent preprocessing,
+  and YAML-based configuration pipelines.
 
+repository: https://github.com/MoustafaMohamed01/datacmp
+license: MIT
 
 cleaning:
-  fill_strategy:
-    categorical: mode
-    numeric: median
-  outlier_handling:
-    action: cap
-    enabled: true
-    iqr_multiplier: 1.5
-    method: iqr
   threshold_drop: 0.45
+  
+  fill_strategy:
+    numeric: median
+    categorical: mode
+  
+  outlier_handling:
+    enabled: true
+    method: iqr
+    iqr_multiplier: 1.5
+    action: cap
+
 drop_duplicates: true
+
 profiling:
   include_more_stats: true
+  compute_correlations: true
+  correlation_method: pearson
+
+visualization:
+  enabled: true
+    plots:
+    missing_heatmap: true
+    correlation_heatmap: true
+    distributions: true
+  
+  style:
+    figure_size: [10, 6]
+    dpi: 300
+    color_palette: viridis
+    
+  max_features_distribution: 12
+
+reporting:
+  formats:
+    html: true
+    txt: true
+    csv: true
+  
+  include_plots: true
+  
+  include_cleaning_log: true
+  
+  style:
+    theme: modern
+    primary_color: '#667eea'
+    secondary_color: '#764ba2'
+
+performance:
+  parallel: false
+  n_jobs: -1
+  memory_efficient: false
+  chunk_size: 10000
+
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  save_to_file: false
+  log_file_path: 'datacmp.log'
+
+advanced:
+  ai_suggestions:
+    enabled: false
+    model: gpt-4
+    max_tokens: 500
+  
+  validation:
+    enabled: false
+    schema_path: null
+  custom_transformations:
+    enabled: false
+    module_path: null
+
+features:
+  column_cleaning:
+    lowercase: true
+    remove_spaces: true
+    remove_special_chars: true
+    max_length: 50
+  
+  missing_values:
+    high_missing_threshold: 0.3
+    
+    analyze_patterns: true
+  
+  dtype_detection:
+    auto_datetime: true
+    auto_numeric: true
+    categorical_threshold: 0.05
+
+export:
+  paths:
+    cleaned_csv: 'cleaned_data.csv'
+    report_html: 'datacmp_report.html'
+    report_txt: 'datacmp_report.txt'
+    plots_dir: './plots'
+  
+  csv:
+    index: false
+    encoding: 'utf-8'
+    compression: null
+  
+  overwrite: true
